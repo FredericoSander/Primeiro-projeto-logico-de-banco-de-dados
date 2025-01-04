@@ -78,7 +78,7 @@ insert into product (Pname, classification_Kids, Category, Avaliation, size)
 
 ### 3.3 **Tabela `payments`** (Pagamentos)
 
-Armazena informações sobre os pagamentos dos clientes.
+A tabela `payments` armazena as informações sobre os pagamentos dos clientes.
 
 **Estrutura:**
 - **idclient** (FK) - Relaciona ao cliente.
@@ -237,7 +237,7 @@ values
 
 ### 3.9 **Tabela `productOrder`** (Produtos do Pedido)
 
-Relaciona os produtos aos pedidos.
+A tabela `productOrder` relaciona os produtos aos pedidos.
 
 **Estrutura:**
 - **IdPOproduct** (FK) - Identificador do produto.
