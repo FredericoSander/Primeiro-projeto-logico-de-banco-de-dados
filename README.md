@@ -13,7 +13,7 @@ Este desafio de projeto consiste na criação de um projeto lógico de banco de 
 
 ## 2. Modelo Entidade Relacional
 - Imagem Modelo Entidade Relacional e-commerce
-![Diagrama de Relacionamento](E-commerce.png)
+![Diagrama de Relacionamento](https://github.com/FredericoSander/Primeiro-projeto-logico-de-banco-de-dados/blob/main/Imagens/E-commerce.png)
 
 ## 3. Tabelas do Banco de Dados
 
