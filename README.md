@@ -4,12 +4,12 @@
 
 Este desafio de projeto consiste na criação de um projeto lógico de banco de dados para um cenário de e-commerce, com o objetivo de gerenciar clientes, produtos, pedidos, pagamentos, estoque, fornecedores e vendedores. Durante a modelagem, foi realizada a implementação de chaves primárias, chaves estrangeiras e constraints presente no cenário modelado. O projeto contempla o Script SQL para a criação do banco de dados relacional. Posteriormente, por meio de Scripts, os dados devem ser persistidos dados para a realização de testes, utilizando queries simples e complexas. As queries criadas devem possuir as seguintes cláusulas.
 
-- Recuperação de informações simples com Select Statment
-- Filtros com WHERE Statement
-- Expressões para gerar atributos derivados
-- Definir ordenação dos dados com Order By
-- aplicação de condições de filtro aos grupos Having Statement
-- Criação de junções entre tabelas para fornecer uma perspectivas mais complexas dos dados
+- Recuperação de informações simples com Select Statment.
+- Filtros com WHERE Statement.
+- Expressões para gerar atributos derivados.
+- Definir ordenação dos dados com Order By.
+- aplicação de condições de filtro aos grupos Having Statement.
+- Criação de junções entre tabelas para fornecer uma perspectivas mais complexas dos dados.
 
 ## 2. Modelo Entidade Relacional
 - Imagem Modelo Entidade Relacional e-commerce
@@ -37,8 +37,25 @@ A tabela `clients` armazena as informações dos clientes do sistema, como nome,
 **Restrição:**
 - `unique_cpf_client`: CPF único.
 
+**Comando SQL para criação da tabela**
+```sql
+create table clients(
+	idClients int auto_increment primary key,
+    Pname varchar(10),
+    Minit char(3),
+    Lname varchar(20),
+    CPF char(11) not null,
+    Street varchar(45),
+    Num int not null,
+    District varchar(45),
+    City varchar(15),
+    State Varchar(10),
+    Country Varchar(10),
+    constraint unique_cpf_client unique (CPF)
+    );
+```
 
-**Exemplo de dados:**
+**Exemplo de dados a serem persistidos:**
 ```sql
 insert into clients (Pname, minit, lname, CPF, street, num, district, city, state, country)
     values
@@ -63,7 +80,20 @@ A tabela `product` armazena informações sobre os produtos disponíveis para ve
 - **Avaliation** - Avaliação média do produto.
 - **size** - Tamanho do produto.
 
-**Exemplo de dados:**
+**Comando SQL para criação da tabela**
+```sql
+create table product(
+	Idproduct int auto_increment primary key,
+    Pname varchar(10) not null,
+    Classification_Kids bool default false,
+    Category enum('Eletronic','Clothes','Toys','Furniture','Books') not null,
+	Avaliation float default 0,
+	size varchar(10)
+);
+
+```
+
+**Exemplo de dados a serem persistidos:**
 
 ```sql
 insert into product (Pname, classification_Kids, Category, Avaliation, size)
@@ -74,6 +104,7 @@ insert into product (Pname, classification_Kids, Category, Avaliation, size)
     ('Camiseta', false, 'Clothes', 4, null),
     ('A Indomada', false, 'Books', 4, null);
 ```
+
 ---
 
 ### 3.3 **Tabela `payments`** (Pagamentos)
@@ -88,6 +119,17 @@ A tabela `payments` armazena as informações sobre os pagamentos dos clientes.
 
 **Chave Primária Composta:**
 - `idclient`, `idpayment`.
+
+**Comando SQL para criação da tabela**
+```sql
+ create table payments(
+	idclient int,
+    idpayment int,
+    TypePayment enum('Cartão','Dois cartões'),
+    limiteAvailable float,
+    primary key (idclient, idpayment)
+  );
+```
 
 ---
 
@@ -105,8 +147,21 @@ A tabela `orders` registra os pedidos feitos pelos clientes, incluindo status, d
 **Relacionamento:**
 - Relaciona-se com `clients(idClients)`.
 
-**Exemplo de dados:**
+**Comando SQL para criação da tabela**
+```sql
+ create table orders(
+	IdOrder int auto_increment primary key,
+    IdOrderClient int,
+    orderStatus enum('Cancelado','Confirmado','Em processamento') default 'Em processamento',
+    orderDescription varchar(255),
+    sendValue float default 10,
+    paymentCash bool default false,
+    constraint fk_order_client foreign key (IdOrderClient) references clients(idClients)
+		on update cascade
+ );
+```
 
+**Exemplo de dados a serem persistidos:**
 ```sql
 insert into orders (idOrderClient, orderStatus, orderDescription, sendValue, paymentCash) 
 values
@@ -119,6 +174,7 @@ values
     (3, 'Confirmado', null, null, 1),
     (3, default, 'compra via site', 500, 0);
 ```
+---
 
 ### 3.5 **Tabela `productStorage`** (Estoque de Produtos)
 
@@ -129,8 +185,16 @@ A tabela `productStorage` mantém informações sobre a quantidade de cada produ
 - **storageLocation** - Localização do armazenamento do produto.
 - **quantity** - Quantidade disponível do produto.
 
-**Exemplo de dados:**
+**Comando SQL para criação da tabela**
+```sql
+   create table productStorage(
+	idProductStorage int auto_increment primary key,
+    storageLocation varchar (255),
+    quantity int default 0
+);
+```
 
+**Exemplo de dados a serem persistidos:**
 ```sql
 insert into productStorage (storageLocation, quantity)
 values
@@ -141,6 +205,7 @@ values
     ('Curitiba', 550),
     ('São Paulo', 20);
 ```
+
 ---
 
 ### 3.6 **Tabela `supplier`** (Fornecedores)
@@ -164,8 +229,27 @@ A tabela `supplier` armazena as informações dos fornecedores dos produtos, com
 **Restrição:**
 - `unique_supplier`: CNPJ único.
 
-**Exemplo de dados:**
+**Comando SQL para criação da tabela**
+```sql
+create table supplier(
+	IdSupplier int auto_increment primary key,
+    storageLocation varchar (255),
+    corporateName varchar (255) not null,
+    SocialName varchar(255),
+    CNPJ char(15) not null,
+    contact varchar (11) not null,    
+	Street varchar(45)not null,
+    Num int not null,
+    District varchar(45)not null,
+    City varchar(15)not null,
+    State Varchar(10)not null,
+    Country Varchar(10)not null,
+    constraint unique_supplier unique (CNPJ)
+);
 
+```
+
+**Exemplo de dados a serem persistidos:**
 ```sql
 insert into supplier (storageLocation, corporateName, SocialName, CNPJ, contact, street, num, District, city, state, country)
 values
@@ -173,6 +257,7 @@ values
     ('Curitiba', 'Laranja LTDA', null, 222222222222222, 11111111111, 'Jequitibá', 23, 'palmeiras', 'Curitiba', 'SC', 'Brasil'),
     ('Rio de Janeiro', 'Jurubeba LTDA', null, 111111111111111, 31999991234, 'California', 45, 'Leblon', 'Rio de Janeiro', 'RJ', 'Brasil');
 ```
+
 ---
 
 ### 3.7 **Tabela `seller`** (Vendedores)
@@ -198,8 +283,28 @@ A tabela `seller` armazena informações sobre os vendedores, incluindo nome, CP
 - `unique_CNPJ_supplier`: CNPJ único.
 - `unique_CPF_supplier`: CPF único.
 
-**Exemplo de dados:**
+**Comando SQL para criação da tabela**
+```sql
+create table seller(
+	IdSeller int auto_increment primary key,
+    CorporateName varchar (255),
+    SocialName varchar(255) not null,
+    CNPJ char(15),
+    CPF char(11),
+    contact varchar (11), 
+    RegistrationDate date,
+	Street varchar(45),
+    Num int not null,
+    District varchar(45),
+    City varchar(15),
+    State Varchar(10),
+    Country Varchar(10),
+     constraint unique_CNPJ_supplier unique (CNPJ),
+     constraint unique_CPF_supplier unique (CPF)
+);
+```
 
+**Exemplo de dados a serem persistidos:**
 ```sql
 insert into seller(CorporateName, SocialName, CNPJ, CPF, contact, RegistrationDate, street, num, District, city, state, country)
 values
@@ -207,6 +312,7 @@ values
     ('Laranja LTDA', 'Laranja LTDA', 456789123000174, null, 15985214576, '2022-04-23', 'Jequitibá', 23, 'palmeiras', 'Curitiba', 'SC', 'Brasil'),
     ('João Antunes', 'João Antunes', null, 85214796345, 31999991234, '2015-05-23', 'California', 45, 'Leblon', 'Rio de Janeiro', 'RJ', 'Brasil');
 ```
+
 ---
 
 ### 3.8 **Tabela `productSeller`** (Produtos do Vendedor)
@@ -221,8 +327,19 @@ A tabela `productSeller` registra os produtos que estão sendo vendidos por cada
 **Chave Primária Composta:**
 - `IdPSeller`, `IdPproduct`.
 
-**Exemplo de dados:**
+**Comando SQL para criação da tabela**
+```sql
+create table productSeller(
+	IdPSeller int,
+    IdPproduct int,
+    prodquantity int default 1,
+    primary key(IdPSeller, IdPproduct),
+    constraint fk_product_seller foreign key (IdPSeller) references Seller(idSeller),
+    constraint fk_product_product foreign key (IdPproduct) references product(Idproduct)
+);
+```
 
+**Exemplo de dados a serem persistidos:**
 ```sql
 insert into productSeller(idPSeller, idPproduct, quantity)
 values
@@ -233,6 +350,7 @@ values
     (3, 1, 50),
     (3, 2, 100);
 ```
+
 ---
 
 ### 3.9 **Tabela `productOrder`** (Produtos do Pedido)
@@ -248,8 +366,20 @@ A tabela `productOrder` relaciona os produtos aos pedidos.
 **Chave Primária Composta:**
 - `IdPOproduct`, `IdPOorder`.
 
-**Exemplo de dados:**
+**Comando SQL para criação da tabela**
+```sql
+create table productOrder(
+	IdPOproduct int,
+    IdPOorder int,
+    poQuantity int default 1,
+    poStatus enum('Disponível','Sem estoque') default 'Disponível',
+    primary key (IdPOproduct,IdPOorder),
+    constraint fk_productorder_seller foreign key (IdPOproduct) references product(Idproduct),
+	constraint fk_productorder_product foreign key (IdPOorder) references orders(IdOrder)
+);
+```
 
+**Exemplo de dados a serem persistidos:**
 ```sql
 insert into productOrder(idPOproduct, idPOorder, poQuantity, poStatus) 
 values
@@ -257,6 +387,7 @@ values
     (2, 15, 1, null),
     (3, 16, 1, null);
 ```
+
 ---
 
 ### 3.10 **Tabela `storageLocation`** (Localização de Armazenamento de Produtos)
@@ -271,13 +402,25 @@ A tabela `storageLocation` mantém a relação entre os produtos e seus respecti
 **Chave Primária Composta:**
 - `idLproduct`, `idLstorage`.
 
-**Exemplo de dados:**
+**Comando SQL para criação da tabela**
+```sql
+create table storageLocation(
+	idLproduct int,
+    idLstorage int,
+    location varchar (255) not null,
+    primary Key (idLproduct,idLstorage),
+	constraint fk_storage_location_product foreign key (idLproduct) references product(Idproduct),
+	constraint fk_storage_location_storage foreign key (idLstorage) references productStorage(idProductStorage)
+);
+```
 
+**Exemplo de dados a serem persistidos:**
 ```sql
 insert into storageLocation (idLproduct,idLstorage,location) values
 			(1,1,'RJ'),
             (2,3,'SP');
 ```
+
 ---
 
 ### 3.11 **Tabela `productSupplier`** (Fornecimento de Produtos)
@@ -292,6 +435,18 @@ A tabela `productSupplier` mantém a relação entre os produtos e seus respecti
 **Chave Primária Composta:**
 - `idPsSupplier`, `idPsProduct`.
 
+**Comando SQL para criação da tabela**
+```sql
+create table productSupplier(
+	idPsSupplier int,
+    idPsProduct int,
+    quantity int not null,
+    primary key(idPsSupplier,idPsProduct),
+    constraint fk_product_supplier_supplier foreign key (idPsSupplier) references supplier(idSupplier),
+    constraint fk_product_supplier_product foreign key (idPsProduct) references product(idProduct)
+ );
+```
+
 **Exemplo de dados:**
 
 ```sql
@@ -303,6 +458,7 @@ values
     (3, 3, 5),
     (2, 5, 10);
 ```
+
 ---
 
 ## 4. Relacionamentos entre as Tabelas
@@ -354,4 +510,4 @@ Este banco de dados foi projetado para gerenciar as operações de um e-commerce
 
 ## Autor
 
-- [Frederico S N Cota](https://github.com/Sanderfn)
+- [Frederico S N Cota](https://github.com/FredericoSander)
