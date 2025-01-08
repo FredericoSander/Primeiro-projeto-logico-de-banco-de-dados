@@ -1,6 +1,20 @@
 # Primeiro projeto lógico de banco de dados
 
-## 1. Descrição do projeto
+## Índice 
+
+* [Primeiro projeto lógico de banco de dados](#primeiro-projeto-lógico-de-banco-de-dados)
+* [Índice](#índice)
+* [Descrição do Projeto](#descrição-do-projeto)
+* [Modelo Entidade Relacionamento](#modelo-entidade-relacionamento)
+* [Tabelas do Banco de Dados](#tabelas-do-banco-de-dados)
+* [Relacionamentos entre Tabelas](#relacionamentos-entre-tabelas)
+* [Consultas SQL](consultas-sql)
+* [Técnicas e tecnologias utilizadas](#técnicas-e-tecnologias-utilizadas)
+* [Status do Projeto](#status-do-projeto)
+* [Acesse o Projeto](#acesse-o-projeto)
+* [Conclusão](#conclusão)
+
+## Descrição do Projeto
 
 Este desafio de projeto consiste na criação de um projeto lógico de banco de dados para um cenário de e-commerce, com o objetivo de gerenciar clientes, produtos, pedidos, pagamentos, estoque, fornecedores e vendedores. Durante a modelagem, foi realizada a implementação de chaves primárias, chaves estrangeiras e constraints presente no cenário modelado. O projeto contempla o Script SQL para a criação do banco de dados relacional. Posteriormente, por meio de Scripts, os dados devem ser persistidos dados para a realização de testes, utilizando queries simples e complexas. As queries criadas devem possuir as seguintes cláusulas.
 
@@ -11,13 +25,13 @@ Este desafio de projeto consiste na criação de um projeto lógico de banco de 
 - aplicação de condições de filtro aos grupos Having Statement.
 - Criação de junções entre tabelas para fornecer uma perspectivas mais complexas dos dados.
 
-## 2. Modelo Entidade Relacional
+## Modelo Entidade Relacionamento
 - Imagem Modelo Entidade Relacional e-commerce
 ![Diagrama de Relacionamento](https://github.com/FredericoSander/Primeiro-projeto-logico-de-banco-de-dados/blob/main/Imagens/E-commerce.png)
 
-## 3. Tabelas do Banco de Dados
+## Tabelas do Banco de Dados
 
-### 3.1 **Tabela `clients`** (Clientes)
+### **Tabela `clients`** (Clientes)
 
 A tabela `clients` armazena as informações dos clientes do sistema, como nome, CPF, endereço e dados de localização.
 
@@ -66,9 +80,8 @@ insert into clients (Pname, minit, lname, CPF, street, num, district, city, stat
 
 ```
 
----
 
-### 3.2 **Tabela `product`** (Produtos)
+### **Tabela `product`** (Produtos)
 
 A tabela `product` armazena informações sobre os produtos disponíveis para venda no sistema, como nome, categoria, avaliação e tamanho.
 
@@ -105,9 +118,8 @@ insert into product (Pname, classification_Kids, Category, Avaliation, size)
     ('A Indomada', false, 'Books', 4, null);
 ```
 
----
 
-### 3.3 **Tabela `payments`** (Pagamentos)
+### **Tabela `payments`** (Pagamentos)
 
 A tabela `payments` armazena as informações sobre os pagamentos dos clientes.
 
@@ -131,9 +143,7 @@ A tabela `payments` armazena as informações sobre os pagamentos dos clientes.
   );
 ```
 
----
-
-### 3.4 **Tabela `orders`** (Pedidos)
+### **Tabela `orders`** (Pedidos)
 
 A tabela `orders` registra os pedidos feitos pelos clientes, incluindo status, descrição, valores de envio e pagamento.
 
@@ -157,7 +167,7 @@ A tabela `orders` registra os pedidos feitos pelos clientes, incluindo status, d
     sendValue float default 10,
     paymentCash bool default false,
     constraint fk_order_client foreign key (IdOrderClient) references clients(idClients)
-		on update cascade
+	on update cascade
  );
 ```
 
@@ -174,9 +184,8 @@ values
     (3, 'Confirmado', null, null, 1),
     (3, default, 'compra via site', 500, 0);
 ```
----
 
-### 3.5 **Tabela `productStorage`** (Estoque de Produtos)
+### **Tabela `productStorage`** (Estoque de Produtos)
 
 A tabela `productStorage` mantém informações sobre a quantidade de cada produto armazenado em diferentes locais.
 
@@ -206,9 +215,7 @@ values
     ('São Paulo', 20);
 ```
 
----
-
-### 3.6 **Tabela `supplier`** (Fornecedores)
+### **Tabela `supplier`** (Fornecedores)
 
 A tabela `supplier` armazena as informações dos fornecedores dos produtos, como nome, CNPJ, contato e endereço.
 
@@ -258,9 +265,8 @@ values
     ('Rio de Janeiro', 'Jurubeba LTDA', null, 111111111111111, 31999991234, 'California', 45, 'Leblon', 'Rio de Janeiro', 'RJ', 'Brasil');
 ```
 
----
 
-### 3.7 **Tabela `seller`** (Vendedores)
+### **Tabela `seller`** (Vendedores)
 
 A tabela `seller` armazena informações sobre os vendedores, incluindo nome, CPF, CNPJ, e dados de contato.
 
@@ -299,8 +305,8 @@ create table seller(
     City varchar(15),
     State Varchar(10),
     Country Varchar(10),
-     constraint unique_CNPJ_supplier unique (CNPJ),
-     constraint unique_CPF_supplier unique (CPF)
+    constraint unique_CNPJ_supplier unique (CNPJ),
+    constraint unique_CPF_supplier unique (CPF)
 );
 ```
 
@@ -313,9 +319,7 @@ values
     ('João Antunes', 'João Antunes', null, 85214796345, 31999991234, '2015-05-23', 'California', 45, 'Leblon', 'Rio de Janeiro', 'RJ', 'Brasil');
 ```
 
----
-
-### 3.8 **Tabela `productSeller`** (Produtos do Vendedor)
+### **Tabela `productSeller`** (Produtos do Vendedor)
 
 A tabela `productSeller` registra os produtos que estão sendo vendidos por cada vendedor, junto com a quantidade de cada produto disponível.
 
@@ -351,9 +355,8 @@ values
     (3, 2, 100);
 ```
 
----
 
-### 3.9 **Tabela `productOrder`** (Produtos do Pedido)
+### **Tabela `productOrder`** (Produtos do Pedido)
 
 A tabela `productOrder` relaciona os produtos aos pedidos.
 
@@ -388,9 +391,7 @@ values
     (3, 16, 1, null);
 ```
 
----
-
-### 3.10 **Tabela `storageLocation`** (Localização de Armazenamento de Produtos)
+### **Tabela `storageLocation`** (Localização de Armazenamento de Produtos)
 
 A tabela `storageLocation` mantém a relação entre os produtos e seus respectivos locais de armazenamento.
 
@@ -421,9 +422,8 @@ insert into storageLocation (idLproduct,idLstorage,location) values
             (2,3,'SP');
 ```
 
----
 
-### 3.11 **Tabela `productSupplier`** (Fornecimento de Produtos)
+### **Tabela `productSupplier`** (Fornecimento de Produtos)
 
 A tabela `productSupplier` mantém a relação entre os produtos e seus respectivos fornecedores.
 
@@ -459,9 +459,7 @@ values
     (2, 5, 10);
 ```
 
----
-
-## 4. Relacionamentos entre as Tabelas
+## Relacionamentos entre Tabelas
 
 - **`clients`** e **`orders`**: Relacionamento de um para muitos, onde um cliente pode ter vários pedidos.
 - **`clients`** e **`payments`**: Relacionamento de um para muitos, onde um cliente pode ter vários pagamentos.
@@ -474,27 +472,27 @@ values
 
 ---
 
-## 5. Consultas simples para validação do banco de dados
+## Consultas SQL
 
-### 5.1 Quantos clientes existem na base de dados?
+### Quantos clientes existem na base de dados?
 
 ```sql
 select count(*) from clients;
 ```
 
-### 5.2 Quantos produtos existem na base de dados?
+### Quantos produtos existem na base de dados?
 
 ```sql
 select count(*) from product;
 ```
 
-### 5.3 Quantos pedidos estão cadastrados?
+### Quantos pedidos estão cadastrados?
 
 ```sql
 select count(*) from orders;
 ```
 
-### 5.4  Quantos pedidos foram realizados por cada cliente?
+### Quantos pedidos foram realizados por cada cliente?
 
 ```sql
 select c.idClients, Pname, count(*) as Number_of_orders 
@@ -504,10 +502,28 @@ inner join productOrder p on p.idPOorder = o.idOrder
 group by idClients;
 ```
 
-## 6. Considerações Finais
+## Conclusão
 
 Este banco de dados foi projetado para gerenciar as operações de um e-commerce, possibilitando a administração de clientes, fornecedores, vendedores, produtos, pedidos, pagamentos e estoque. O modelo foi estruturado para otimizar as consultas e facilitar a integração com outras partes do sistema.
 
+## Técnicas e tecnologias utilizadas
+
+- ``SQL``
+- ``MySQL Workbench 8.0``
+- ``Modelagem de dados``
+- ``Análise de dados``
+- ``Git``
+- ``GitHub``
+
+## Status do Projeto
+
+![Status do Projeto](http://img.shields.io/static/v1?label=STATUS&message=Concluído&color=GREEN&style=for-the-badge)
+
+## Acesse o Projeto
+
+Você pode acessar o projeto clicando [aqui](https://github.com/FredericoSander/Primeiro-projeto-logico-de-banco-de-dados/tree/main/Arquivos%20SQL)
+
 ## Autor
 
-- [Frederico S N Cota](https://github.com/FredericoSander)
+| [<img loading="lazy" src="https://avatars.githubusercontent.com/u/136928502?s=96&v=4" width=115><br><sub>Frederico Sander</sub>](https://github.com/FredericoSander)
+| :---: | 
